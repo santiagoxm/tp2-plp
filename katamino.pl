@@ -21,8 +21,29 @@ kPiezasAux(K, S,[P|PS]) :- nombrePiezas(PI), between(S, 11, N), nth0(N, PI, P),
                            Km1 is K - 1, Np1 is N + 1, kPiezasAux(Km1, Np1, PS).
 %                 ^ promete
 
+%seccionTablero(+T, +ALTO, +ANCHO, +IJ, ?ST)
+seccionTablero(_, 0, _, _, []).
+seccionTablero([T|TS], ALTO, ANCHO, (1,J), [ST|STS]) :- Jm1 is J - 1, sublista(Jm1, ANCHO, T, ST),
+                                                        ALTOm1 is ALTO - 1, seccionTablero(TS, ALTOm1, ANCHO, (1, J), STS).
+seccionTablero([_|TS], ALTO, ANCHO, (I,J), ST) :- I > 1, Im1 is I - 1, seccionTablero(TS, ALTO, ANCHO, (Im1,J), ST).
 
+%ubicarPieza(+Tablero, +Identificador)
+ubicarPieza(Tablero, Identificador) :- 
 
+%seccionTablero(T,ALTO, ANCHO, (I,J), ST) :- sublista(I, ALTO, T, Filas), columnasDesdeJ(Filas,J,ANCHO,ST).
+%columnasDesdeJ([], _, _, []).
+%columnasDesdeJ([F|Filas],J,ANCHO,[F1|Fs]):- sublista(Jm1,ANCHO,F,F1), J is Jm1 + 1, columnasDesdeJ(Filas, J, ANCHO, Fs).
+
+%T = [[_C11,_C12,_C13],
+%    [_C21,_C22,_C23],
+%    [_C31,_C32,_C33],
+%    [_C41,_C42,_C43],
+%    [_C51,_C52,_C53]],
+    
+%    IJ fila I .sublista (des- j. , tomar -ancho, l -fila i )
+%ST = [[_C12,_C13],
+%    [_C22,_C23],
+%    [_C32,_C33]].
 
 %Hacer que sea el resultado de sublista desde 0 hasta 12, agarrando 1 cada vez
 
