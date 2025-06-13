@@ -28,7 +28,8 @@ seccionTablero([T|TS], ALTO, ANCHO, (1,J), [ST|STS]) :- Jm1 is J - 1, sublista(J
 seccionTablero([_|TS], ALTO, ANCHO, (I,J), ST) :- I > 1, Im1 is I - 1, seccionTablero(TS, ALTO, ANCHO, (Im1,J), ST).
 
 %ubicarPieza(+Tablero, +Identificador)
-ubicarPieza(Tablero, Identificador) :- 
+ubicarPieza(T, I) :- coordenadas(T, IJ), pieza(I,P), 
+                     tamaño(P, F, C), seccionTablero(T, F, C, IJ, P).
 
 %seccionTablero(T,ALTO, ANCHO, (I,J), ST) :- sublista(I, ALTO, T, Filas), columnasDesdeJ(Filas,J,ANCHO,ST).
 %columnasDesdeJ([], _, _, []).
