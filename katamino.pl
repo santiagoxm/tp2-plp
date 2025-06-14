@@ -31,6 +31,10 @@ seccionTablero([_|TS], ALTO, ANCHO, (I,J), ST) :- I > 1, Im1 is I - 1, seccionTa
 ubicarPieza(T, I) :- coordenadas(T, IJ), pieza(I,P), 
                      tamaño(P, F, C), seccionTablero(T, F, C, IJ, P).
 
+%ubicarPiezas(+Tablero, +Poda, +Identificadores)
+ubicarPiezas(T, _, []).
+ubicarPiezas(T, sinPoda, [I|IS]) :- ubicarPieza(T, I), ubicarPiezas(T, P, IS).
+
 %seccionTablero(T,ALTO, ANCHO, (I,J), ST) :- sublista(I, ALTO, T, Filas), columnasDesdeJ(Filas,J,ANCHO,ST).
 %columnasDesdeJ([], _, _, []).
 %columnasDesdeJ([F|Filas],J,ANCHO,[F1|Fs]):- sublista(Jm1,ANCHO,F,F1), J is Jm1 + 1, columnasDesdeJ(Filas, J, ANCHO, Fs).
