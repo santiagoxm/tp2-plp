@@ -38,6 +38,35 @@ ubicarPiezas(T, sinPoda, [I|IS]) :- ubicarPieza(T, I), ubicarPiezas(T, P, IS).
 %llenarTablero(+Poda, +Columnas, -Tablero)
 llenarTablero(sinPoda, C, T) :- tablero(C, T), kPiezas(C, P), ubicarPiezas(T, sinPoda, P).
 
+%cantSoluciones(+Poda, +Columnas, -N)
+cantSoluciones(Poda, Columnas, N) :- 
+findall(T, llenarTablero(Poda, Columnas, T), TS),
+length(TS, N).
+
+% ?- time(cantSoluciones(sinPoda, 3, N)).
+% 73,439,864 inferences, 5.291 CPU in 5.321 seconds (99% CPU, 13880117 Lips)
+% N = 28.
+
+% ?- time(cantSoluciones(sinPoda, 4, N)).
+% 2,847,505,243 inferences, 202.913 CPU in 203.990 seconds (99% CPU, 14033156 Lips)
+% N = 200.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 %seccionTablero(T,ALTO, ANCHO, (I,J), ST) :- sublista(I, ALTO, T, Filas), columnasDesdeJ(Filas,J,ANCHO,ST).
 %columnasDesdeJ([], _, _, []).
 %columnasDesdeJ([F|Filas],J,ANCHO,[F1|Fs]):- sublista(Jm1,ANCHO,F,F1), J is Jm1 + 1, columnasDesdeJ(Filas, J, ANCHO, Fs).
