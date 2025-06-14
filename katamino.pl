@@ -1,8 +1,14 @@
 :- use_module(piezas).
 
 %sublista(+Descartar, +Tomar, +L, -R)
-sublista(Descartar,Tomar, L, R) :- length(LD, Descartar), append(LD, L1, L), 
-                                   length(R, Tomar), append(R, _, L1).
+sublista(D ,T, L, R) :- length(LD, D), append(LD, L1, L), 
+                        length(R, T), append(R, _, L1).
+
+% Es reversible en el cuarto argumento R, pero no es reversible en el primer
+% argumento descartar. Esto se debe a que si D no esta instanciado, length(LD, D)
+% genera listas infinitas con longitud D cada vez mas grande, como
+% LD tampoco esta instanciado, entonces la ejecucion no termina
+% y se podria decir que el predicado sublista falla.
 
 %tablero(+K, -T)
 tablero(K, [A,B,C,D,E|[]]) :- length(A, K), length(B, K), length(C, K), length(D, K), length(E, K).
@@ -27,16 +33,19 @@ seccionTablero([T|TS], ALTO, ANCHO, (1,J), [ST|STS]) :- Jm1 is J - 1, sublista(J
                                                         ALTOm1 is ALTO - 1, seccionTablero(TS, ALTOm1, ANCHO, (1, J), STS).
 seccionTablero([_|TS], ALTO, ANCHO, (I,J), ST) :- I > 1, Im1 is I - 1, seccionTablero(TS, ALTO, ANCHO, (Im1,J), ST).
 
+%seccionTablero(T, ALTO, ANCHO, (I,J), ST) :- Jm1 is J - 1, A is I + ALTO,
+%between(I, A, N), nth1(N, T, F1), nth1(N, ST, F2), sublista(Jm1, ANCHO, F1, F2).
+
 %ubicarPieza(+Tablero, +Identificador)
 ubicarPieza(T, I) :- coordenadas(T, IJ), pieza(I,P), 
                      tamaño(P, F, C), seccionTablero(T, F, C, IJ, P).
 
 %ubicarPiezas(+Tablero, +Poda, +Identificadores)
-ubicarPiezas(T, _, []).
-ubicarPiezas(T, sinPoda, [I|IS]) :- ubicarPieza(T, I), ubicarPiezas(T, P, IS).
+ubicarPiezas(_, _, []).
+ubicarPiezas(T, P, [I|IS]) :- poda(P, T), ubicarPieza(T, I), ubicarPiezas(T, P, IS).
 
 %llenarTablero(+Poda, +Columnas, -Tablero)
-llenarTablero(sinPoda, C, T) :- tablero(C, T), kPiezas(C, P), ubicarPiezas(T, sinPoda, P).
+llenarTablero(P, C, T) :- tablero(C, T), kPiezas(C, X), ubicarPiezas(T, P, X).
 
 %cantSoluciones(+Poda, +Columnas, -N)
 cantSoluciones(Poda, Columnas, N) :- 
@@ -49,6 +58,23 @@ length(TS, N).
 
 % ?- time(cantSoluciones(sinPoda, 4, N)).
 % 2,847,505,243 inferences, 202.913 CPU in 203.990 seconds (99% CPU, 14033156 Lips)
+% N = 200.
+
+%todosGruposLibresModulo5(+Tablero)
+todosGruposLibresModulo5(Tablero) :- findall(IJ, ubicacionLibre(Tablero, IJ), Lista), agrupar(Lista, G), maplist(longMayorACinco, G).
+longMayorACinco(F):- length(F,N), N >= 5.
+
+poda(sinPoda, _).
+poda(podaMod5, T) :- todosGruposLibresModulo5(T).
+
+ubicacionLibre(Tablero, (I,J)) :- nth1(I, Tablero, Fila), nth1(J, Fila, Columna), var(Columna).
+
+% ?- time(cantSoluciones(podaMod5, 3, N)).
+% 26,079,624 inferences, 1.904 CPU in 1.915 seconds (99% CPU, 13697778 Lips)
+% N = 28.
+
+% ?- time(cantSoluciones(podaMod5, 4, N)).
+% 522,899,929 inferences, 37.558 CPU in 37.744 seconds (100% CPU, 13922380 Lips)
 % N = 200.
 
 
