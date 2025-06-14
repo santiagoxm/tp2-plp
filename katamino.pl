@@ -6,12 +6,12 @@ sublista(D ,T, L, R) :- length(LD, D), append(LD, L1, L),
 
 % Es reversible en el cuarto argumento R, pero no es reversible en el primer
 % argumento descartar. Esto se debe a que si D no esta instanciado, length(LD, D)
-% genera listas infinitas con longitud D cada vez mas grande, como
+% genera listas infinitas con longitud D cada vez mas grande, ya que
 % LD tampoco esta instanciado, entonces la ejecucion no termina
 % y se podria decir que el predicado sublista falla.
 
 %tablero(+K, -T)
-tablero(K, [A,B,C,D,E|[]]) :- length(A, K), length(B, K), length(C, K), length(D, K), length(E, K).
+tablero(K, [F1,F2,F3,F4,F5]) :- length(F1, K), length(F2, K), length(F3, K), length(F4, K), length(F5, K).
 
 %tamaño(+M, -F, -C)
 tamaño([], 0, _).
@@ -23,18 +23,14 @@ coordenadas(T,(I,J)):- tamaño(T,F,C), between(1,F,I), between(1,C,J).
 %kPiezas(+K, -PS)
 kPiezas(K, PS) :- kPiezasAux(K, 0, PS).
 kPiezasAux(0, _, []).
-kPiezasAux(K, S,[P|PS]) :- nombrePiezas(PI), between(S, 11, N), nth0(N, PI, P), 
+kPiezasAux(K, S,[P|PS]) :- K > 0, nombrePiezas(PI), between(S, 11, N), nth0(N, PI, P),
                            Km1 is K - 1, Np1 is N + 1, kPiezasAux(Km1, Np1, PS).
-%                 ^ promete
 
 %seccionTablero(+T, +ALTO, +ANCHO, +IJ, ?ST)
 seccionTablero(_, 0, _, _, []).
 seccionTablero([T|TS], ALTO, ANCHO, (1,J), [ST|STS]) :- Jm1 is J - 1, sublista(Jm1, ANCHO, T, ST),
                                                         ALTOm1 is ALTO - 1, seccionTablero(TS, ALTOm1, ANCHO, (1, J), STS).
 seccionTablero([_|TS], ALTO, ANCHO, (I,J), ST) :- I > 1, Im1 is I - 1, seccionTablero(TS, ALTO, ANCHO, (Im1,J), ST).
-
-%seccionTablero(T, ALTO, ANCHO, (I,J), ST) :- Jm1 is J - 1, A is I + ALTO,
-%between(I, A, N), nth1(N, T, F1), nth1(N, ST, F2), sublista(Jm1, ANCHO, F1, F2).
 
 %ubicarPieza(+Tablero, +Identificador)
 ubicarPieza(T, I) :- coordenadas(T, IJ), pieza(I,P), 
