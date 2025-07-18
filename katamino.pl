@@ -27,10 +27,8 @@ kPiezasAux(K, S,[P|PS]) :- K > 0, nombrePiezas(PI), between(S, 11, N), nth0(N, P
                            Km1 is K - 1, Np1 is N + 1, kPiezasAux(Km1, Np1, PS).
 
 %seccionTablero(+T, +ALTO, +ANCHO, +IJ, ?ST)
-seccionTablero(_, 0, _, _, []).
-seccionTablero([T|TS], ALTO, ANCHO, (1,J), [ST|STS]) :- Jm1 is J - 1, sublista(Jm1, ANCHO, T, ST),
-                                                        ALTOm1 is ALTO - 1, seccionTablero(TS, ALTOm1, ANCHO, (1, J), STS).
-seccionTablero([_|TS], ALTO, ANCHO, (I,J), ST) :- I > 1, Im1 is I - 1, seccionTablero(TS, ALTO, ANCHO, (Im1,J), ST).
+seccionTablero(T,ALTO, ANCHO, (I,J), ST) :- Im1 is I-1, sublista(Im1, ALTO, T, Filas), 
+                                            Jm1 is J-1, maplist(sublista(Jm1, ANCHO), Filas, ST).
 
 %ubicarPieza(+Tablero, +Identificador)
 ubicarPieza(T, I) :- coordenadas(T, IJ), pieza(I,P), 
