@@ -7,8 +7,8 @@ sublista(D ,T, L, R) :- length(LD, D), append(LD, L1, L),
 % Es reversible en el cuarto argumento R, pero no es reversible en el primer
 % argumento descartar. Esto se debe a que si D no esta instanciado, length(LD, D)
 % genera listas infinitas con longitud D cada vez mas grande, ya que
-% LD tampoco esta instanciado, entonces la ejecucion no termina
-% y se podria decir que el predicado sublista falla.
+% LD tampoco esta instanciado, entonces la ejecución no termina
+% y se podría decir que el predicado sublista se cuelga.
 
 %tablero(+K, -T)
 tablero(K, [F1,F2,F3,F4,F5]) :- length(F1, K), length(F2, K), length(F3, K), length(F4, K), length(F5, K).
@@ -38,7 +38,7 @@ ubicarPieza(T, I) :- coordenadas(T, IJ), pieza(I,P),
 
 %ubicarPiezas(+Tablero, +Poda, +Identificadores)
 ubicarPiezas(_, _, []).
-ubicarPiezas(T, P, [I|IS]) :- poda(P, T), ubicarPieza(T, I), ubicarPiezas(T, P, IS).
+ubicarPiezas(T, P, [I|IS]) :- ubicarPieza(T, I), poda(P, T), ubicarPiezas(T, P, IS).
 
 %llenarTablero(+Poda, +Columnas, -Tablero)
 llenarTablero(P, C, T) :- tablero(C, T), kPiezas(C, X), ubicarPiezas(T, P, X).
@@ -57,8 +57,8 @@ length(TS, N).
 % N = 200.
 
 %todosGruposLibresModulo5(+Tablero)
-todosGruposLibresModulo5(Tablero) :- findall(IJ, ubicacionLibre(Tablero, IJ), Lista), agrupar(Lista, G), maplist(longMayorACinco, G).
-longMayorACinco(F):- length(F,N), N >= 5.
+todosGruposLibresModulo5(Tablero) :- findall(IJ, ubicacionLibre(Tablero, IJ), Lista), agrupar(Lista, G), maplist(longMod5, G).
+longMod5(F):- length(F,N), mod(N, 5)=:=0.
 
 poda(sinPoda, _).
 poda(podaMod5, T) :- todosGruposLibresModulo5(T).
