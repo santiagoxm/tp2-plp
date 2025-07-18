@@ -21,10 +21,10 @@ tamaño([M|MS], F, C) :- length(M, C), tamaño(MS, Fm1, C), F is Fm1 + 1.
 coordenadas(T,(I,J)):- tamaño(T,F,C), between(1,F,I), between(1,C,J).
 
 %kPiezas(+K, -PS)
-kPiezas(K, PS) :- kPiezasAux(K, 0, PS).
-kPiezasAux(0, _, []).
-kPiezasAux(K, S,[P|PS]) :- K > 0, nombrePiezas(PI), between(S, 11, N), nth0(N, PI, P),
-                           Km1 is K - 1, Np1 is N + 1, kPiezasAux(Km1, Np1, PS).
+kPiezas(K, PS) :- nombrePiezas(PI), length(PS, K), kPiezasAux(PI, PS).
+kPiezasAux(_, []).
+kPiezasAux([P|PI], [P|PS]) :- kPiezasAux(PI, PS).
+kPiezasAux([_|PI], PS) :- length(PS, N), N > 0, kPiezasAux(PI, PS).
 
 %seccionTablero(+T, +ALTO, +ANCHO, +IJ, ?ST)
 seccionTablero(T,ALTO, ANCHO, (I,J), ST) :- Im1 is I-1, sublista(Im1, ALTO, T, Filas), 
@@ -64,9 +64,9 @@ poda(podaMod5, T) :- todosGruposLibresModulo5(T).
 ubicacionLibre(Tablero, (I,J)) :- nth1(I, Tablero, Fila), nth1(J, Fila, Columna), var(Columna).
 
 % ?- time(cantSoluciones(podaMod5, 3, N)).
-% 26,079,624 inferences, 1.904 CPU in 1.915 seconds (99% CPU, 13697778 Lips)
+% 27,094,300 inferences, 1.906 CPU in 1.917 seconds (99% CPU, 14211664 Lips)
 % N = 28.
 
 % ?- time(cantSoluciones(podaMod5, 4, N)).
-% 522,899,929 inferences, 37.558 CPU in 37.744 seconds (100% CPU, 13922380 Lips)
+% 520,346,334 inferences, 36.401 CPU in 36.602 seconds (99% CPU, 14294849 Lips)
 % N = 200.
